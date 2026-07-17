@@ -130,10 +130,16 @@ p { color: var(--text-secondary); line-height: 1.7; }
   color: white;
   box-shadow: 0 2px 12px var(--primary-glow);
 }
-.btn-primary:hover {
-  background: linear-gradient(135deg, #a17411, var(--primary-hover));
-  box-shadow: 0 4px 20px var(--primary-glow);
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #a17411, var(--primary-hover));
+    box-shadow: 0 4px 20px var(--primary-glow);
+    transform: translateY(-1px);
+  }
+}
+.btn-primary:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 8px var(--primary-glow);
 }
 .btn-primary:disabled {
   opacity: 0.5;
@@ -146,9 +152,14 @@ p { color: var(--text-secondary); line-height: 1.7; }
   border: 1px solid var(--primary);
   color: var(--primary);
 }
-.btn-outline:hover {
-  background: var(--primary);
-  color: white;
+@media (hover: hover) {
+  .btn-outline:hover {
+    background: var(--primary);
+    color: white;
+  }
+}
+.btn-outline:active {
+  transform: scale(0.96);
 }
 
 .btn-ghost {
@@ -156,7 +167,10 @@ p { color: var(--text-secondary); line-height: 1.7; }
   color: var(--text-secondary);
   padding: 0.5rem 1rem;
 }
-.btn-ghost:hover { color: var(--text-primary); }
+@media (hover: hover) {
+  .btn-ghost:hover { color: var(--text-primary); }
+}
+.btn-ghost:active { transform: scale(0.96); }
 .btn-ghost.active { color: var(--primary); }
 
 .btn-full { width: 100%; }
@@ -400,9 +414,14 @@ p { color: var(--text-secondary); line-height: 1.7; }
   transition: transform var(--transition), box-shadow var(--transition);
   border: 1px solid var(--border);
 }
-.movie-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
+@media (hover: hover) {
+  .movie-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+  }
+}
+.movie-card:active {
+  transform: scale(0.97);
 }
 
 .movie-card-poster {
@@ -561,6 +580,7 @@ p { color: var(--text-secondary); line-height: 1.7; }
   padding-bottom: 0.5rem;
   scrollbar-width: thin;
   scrollbar-color: var(--bg-elevated) transparent;
+  -webkit-overflow-scrolling: touch;
 }
 
 .cast-card {
@@ -628,10 +648,15 @@ p { color: var(--text-secondary); line-height: 1.7; }
   font-weight: 600;
   transition: all var(--transition);
 }
-.showtime-chip:hover {
-  background: var(--accent-green);
-  color: var(--bg-primary);
-  transform: scale(1.05);
+@media (hover: hover) {
+  .showtime-chip:hover {
+    background: var(--accent-green);
+    color: var(--bg-primary);
+    transform: scale(1.05);
+  }
+}
+.showtime-chip:active {
+  transform: scale(0.95);
 }
 .showtime-time { font-size: 0.95rem; }
 .showtime-price {
@@ -686,6 +711,7 @@ p { color: var(--text-secondary); line-height: 1.7; }
 .seat-map-wrapper {
   flex: 1;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Screen indicator */
@@ -749,12 +775,17 @@ p { color: var(--text-secondary); line-height: 1.7; }
   color: var(--text-secondary);
   border: 1px solid var(--border-light);
 }
-.seat-available:hover {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: var(--accent-blue);
-  color: var(--accent-blue);
-  transform: scale(1.15);
-  cursor: pointer;
+@media (hover: hover) {
+  .seat-available:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    transform: scale(1.15);
+    cursor: pointer;
+  }
+}
+.seat-available:active {
+  transform: scale(0.9);
 }
 
 .seat-selected {
@@ -1305,14 +1336,20 @@ p { color: var(--text-secondary); line-height: 1.7; }
 @media (max-width: 768px) {
   .navbar {
     padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+  }
+  .navbar-brand {
+    order: 1;
   }
   .navbar-toggle {
     display: flex;
+    order: 2;
   }
   .navbar-links {
     display: none;
     position: absolute;
     top: 100%;
+    order: 4;
     left: 0;
     right: 0;
     flex-direction: column;
@@ -1422,6 +1459,21 @@ p { color: var(--text-secondary); line-height: 1.7; }
     font-size: 0;
   }
   .aisle-gap-col { width: 8px; }
+  .showtime-chip {
+    padding: 0.5rem 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .movie-grid {
+    grid-template-columns: 1fr; /* single column for very tiny screens */
+  }
+  .main-content { padding: 1rem; }
+  .seat {
+    width: 20px;
+    height: 20px;
+  }
+  .auth-card { padding: 1.25rem; }
 }
 
 /* ── Booking Filters ───────────────────────────────── */
@@ -1516,6 +1568,7 @@ p { color: var(--text-secondary); line-height: 1.7; }
   padding-bottom: 0.5rem;
   scrollbar-width: thin;
   scrollbar-color: var(--primary) transparent;
+  -webkit-overflow-scrolling: touch;
 }
 
 .date-carousel::-webkit-scrollbar {
