@@ -5,7 +5,8 @@ import config from '../../config/index.js';
 const cookieOptions = {
   httpOnly: true,
   secure: config.env === 'production',
-  sameSite: config.env === 'production' ? 'none' : 'strict',
+  sameSite: 'lax',
+  path: '/',
 };
 
 // Convert string duration (e.g., '15m', '7d') to milliseconds
