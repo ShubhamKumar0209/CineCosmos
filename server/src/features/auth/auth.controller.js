@@ -2,11 +2,10 @@ import * as authService from './auth.service.js';
 import { HTTP_STATUS, COOKIE_NAMES } from '../../utils/constants.js';
 import config from '../../config/index.js';
 
-// Common cookie options for HttpOnly cookies
 const cookieOptions = {
   httpOnly: true,
   secure: config.env === 'production',
-  sameSite: 'strict',
+  sameSite: config.env === 'production' ? 'none' : 'strict',
 };
 
 // Convert string duration (e.g., '15m', '7d') to milliseconds
