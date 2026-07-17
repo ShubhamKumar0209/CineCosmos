@@ -38,7 +38,7 @@ const attachTokensToCookie = (res, accessToken, refreshToken) => {
  */
 export const register = async (req, res) => {
   const user = await authService.registerUser(req.body);
-  const { accessToken, refreshToken } = authService.generateTokens(user._id);
+  const { accessToken, refreshToken } = authService.generateTokens(user);
 
   attachTokensToCookie(res, accessToken, refreshToken);
 
@@ -54,7 +54,7 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.loginUser(email, password);
-  const { accessToken, refreshToken } = authService.generateTokens(user._id);
+  const { accessToken, refreshToken } = authService.generateTokens(user);
 
   attachTokensToCookie(res, accessToken, refreshToken);
 
@@ -67,7 +67,12 @@ export const login = async (req, res) => {
 /**
  * Logout user
  */
-export const logout = (req, res) => {
+export const logout = async (req, res) => {
+  if (req.user) {
+    req.user.tokenVersion = (req.user.tokenVersion || 0) + 1;
+    await req.user.save();
+  }
+
   res.cookie(COOKIE_NAMES.ACCESS_TOKEN, 'loggedout', {
     ...cookieOptions,
     maxAge: 10 * 1000, // expire in 10 seconds
@@ -90,7 +95,7 @@ export const refresh = async (req, res) => {
   const token = req.cookies[COOKIE_NAMES.REFRESH_TOKEN];
   const user = await authService.verifyRefreshToken(token);
   
-  const { accessToken, refreshToken } = authService.generateTokens(user._id);
+  const { accessToken, refreshToken } = authService.generateTokens(user);
   attachTokensToCookie(res, accessToken, refreshToken);
 
   res.status(HTTP_STATUS.OK).json({

@@ -9,12 +9,12 @@ const router = express.Router();
 
 router.post('/register', validate(registerSchema), asyncHandler(register));
 router.post('/login', validate(loginSchema), asyncHandler(login));
-router.post('/logout', logout);
 router.post('/refresh', asyncHandler(refresh));
 
 // Protected routes
 router.use(protect);
 
+router.post('/logout', asyncHandler(logout));
 router.get('/me', getMe);
 
 export default router;

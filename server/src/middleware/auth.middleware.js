@@ -34,7 +34,12 @@ export const protect = asyncHandler(async (req, res, next) => {
     return next(new AppError('The user belonging to this token no longer exists.', HTTP_STATUS.UNAUTHORIZED));
   }
 
-  // 4. Grant access to protected route
+  // 4. Check if token version matches (prevents simultaneous login on other devices)
+  if (decoded.tokenVersion !== currentUser.tokenVersion) {
+    return next(new AppError('Session expired. Please log in again.', HTTP_STATUS.UNAUTHORIZED));
+  }
+
+  // 5. Grant access to protected route
   req.user = currentUser;
   next();
 });

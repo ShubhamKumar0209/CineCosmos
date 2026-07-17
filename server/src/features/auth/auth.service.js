@@ -7,15 +7,17 @@ import { HTTP_STATUS } from '../../utils/constants.js';
 /**
  * Generate Access and Refresh Tokens for a user.
  * 
- * @param {string} userId 
+ * @param {Object} user 
  * @returns {Object} { accessToken, refreshToken }
  */
-export const generateTokens = (userId) => {
-  const accessToken = jwt.sign({ id: userId }, config.jwt.secret, {
+export const generateTokens = (user) => {
+  const payload = { id: user._id || user.id, tokenVersion: user.tokenVersion };
+
+  const accessToken = jwt.sign(payload, config.jwt.secret, {
     expiresIn: config.jwt.expiresIn,
   });
 
-  const refreshToken = jwt.sign({ id: userId }, config.jwt.refreshSecret, {
+  const refreshToken = jwt.sign(payload, config.jwt.refreshSecret, {
     expiresIn: config.jwt.refreshExpiresIn,
   });
 
@@ -60,6 +62,10 @@ export const loginUser = async (email, password) => {
     throw new AppError('Incorrect email or password', HTTP_STATUS.UNAUTHORIZED);
   }
 
+  // Increment token version to invalidate any active sessions on other devices
+  user.tokenVersion = (user.tokenVersion || 0) + 1;
+  await user.save();
+
   user.password = undefined;
   return user;
 };
@@ -80,6 +86,10 @@ export const verifyRefreshToken = async (token) => {
 
   if (!user) {
     throw new AppError('User no longer exists', HTTP_STATUS.UNAUTHORIZED);
+  }
+
+  if (decoded.tokenVersion !== user.tokenVersion) {
+    throw new AppError('Session expired. Please log in again.', HTTP_STATUS.UNAUTHORIZED);
   }
 
   return user;
