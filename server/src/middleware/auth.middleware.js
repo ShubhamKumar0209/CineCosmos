@@ -10,13 +10,10 @@ import asyncHandler from '../utils/asyncHandler.js';
  * Checks if the user is authenticated via Access Token.
  */
 export const protect = asyncHandler(async (req, res, next) => {
-  // 1. Get token from Authorization header
-  let token;
-  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    token = req.headers.authorization.split(' ')[1];
-  }
+  // 1. Get token from cookies
+  const token = req.cookies[COOKIE_NAMES.ACCESS_TOKEN];
 
-  if (!token) {
+  if (!token || token === 'loggedout') {
     return next(new AppError('You are not logged in. Please log in to get access.', HTTP_STATUS.UNAUTHORIZED));
   }
 
