@@ -9,11 +9,18 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchMe = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setLoading(false);
+        return;
+      }
       try {
         const { data } = await apiClient.get('/auth/me');
         setUser(data.data.user);
       } catch (error) {
         setUser(null);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
       } finally {
         setLoading(false);
       }
@@ -23,12 +30,16 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const { data } = await apiClient.post('/auth/login', { email, password });
+    localStorage.setItem('accessToken', data.data.accessToken);
+    localStorage.setItem('refreshToken', data.data.refreshToken);
     setUser(data.data.user);
     return data.data.user;
   };
 
   const register = async (name, email, password) => {
     const { data } = await apiClient.post('/auth/register', { name, email, password });
+    localStorage.setItem('accessToken', data.data.accessToken);
+    localStorage.setItem('refreshToken', data.data.refreshToken);
     setUser(data.data.user);
     return data.data.user;
   };
@@ -39,6 +50,8 @@ export const AuthProvider = ({ children }) => {
     } catch {
       // Logout even if the API call fails
     }
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     setUser(null);
   };
 
