@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  # ── Backend API Server ─────────────────────────────────────
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: ticket-booking-server
+    restart: unless-stopped
+    ports:
+      - "5001:5000"
+    env_file:
+      - .env
+    volumes:
+      - ./server/src:/app/src # Hot-reload in development
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - ticket-booking-network
+
+networks:
+  ticket-booking-network:
+    driver: bridge

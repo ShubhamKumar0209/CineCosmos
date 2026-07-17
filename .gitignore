@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build
+dist/
+build/
+
+# Coverage
+coverage/
+
+# Docker
+mongo-data/
+redis-data/
+
+# Documentation / Scratch
+prompt.md
+scratch-ratelimit.js
+fix-admin.js
+test-sync.js
+e2e_test.js
+server/test-sync.js
+server/src/test-sync.js
+server/fix-admin.js
+server/src/fix-admin.js
+server/remote-seed.js
+server/scratch-redis.js
+server/scratch.js
+server/test-api.js

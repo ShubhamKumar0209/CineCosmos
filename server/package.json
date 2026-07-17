@@ -1,0 +1,40 @@
+{
+  "name": "ticket-booking-server",
+  "version": "1.0.0",
+  "description": "Backend server for Movie Ticket Booking Platform",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest --forceExit --detectOpenHandles",
+    "test:unit": "npm test -- --testPathPattern=tests/unit",
+    "test:integration": "npm test -- --testPathPattern=tests/integration"
+  },
+  "keywords": ["movie", "ticket", "booking"],
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.5",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "hpp": "^0.2.3",
+    "ioredis": "^5.4.2",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "rate-limit-redis": "^4.2.0",
+    "razorpay": "^2.9.2",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}
