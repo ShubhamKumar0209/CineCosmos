@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Fragment } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import apiClient from '../api/client.js';
 import { useAuth } from '../context/AuthContext.jsx';
@@ -243,7 +243,7 @@ const SeatSelection = () => {
                       else cls += ' seat-available';
 
                       return (
-                        <span key={col}>
+                        <Fragment key={col}>
                           <button
                             className={cls}
                             onClick={() => toggleSeat(row, col)}
@@ -253,7 +253,7 @@ const SeatSelection = () => {
                             {col}
                           </button>
                           {colAisle && <span className="aisle-gap-col" />}
-                        </span>
+                        </Fragment>
                       );
                     })}
                     <span className="row-label">{getRowLabel(row)}</span>
