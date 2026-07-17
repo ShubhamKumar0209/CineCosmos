@@ -45,6 +45,16 @@ const createApp = () => {
     })
   );
 
+  // ── Health Check ──────────────────────────────────────────
+  app.get('/api/health', (req, res) => {
+    res.status(HTTP_STATUS.OK).json({
+      status: 'success',
+      message: 'Server is running',
+      timestamp: new Date().toISOString(),
+      environment: config.env,
+    });
+  });
+
   // ── Rate Limiting ─────────────────────────────────────────
   app.use('/api', createRateLimiter());
 
@@ -60,16 +70,6 @@ const createApp = () => {
 
   // ── NoSQL Injection Prevention ────────────────────────────
   app.use(mongoSanitize());
-
-  // ── Health Check ──────────────────────────────────────────
-  app.get('/api/health', (req, res) => {
-    res.status(HTTP_STATUS.OK).json({
-      status: 'success',
-      message: 'Server is running',
-      timestamp: new Date().toISOString(),
-      environment: config.env,
-    });
-  });
 
   // ── Temporary Seed Trigger ────────────────────────────────
   app.get('/api/trigger-seed', (req, res) => {
