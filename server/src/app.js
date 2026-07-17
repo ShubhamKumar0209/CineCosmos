@@ -55,8 +55,20 @@ const createApp = () => {
     });
   });
 
-  // ── Rate Limiting ─────────────────────────────────────────
-  app.use('/api', createRateLimiter());
+  // Catch-all root route for automated ping services (like Render)
+  app.get('/', (req, res) => {
+    res.status(HTTP_STATUS.OK).send('CineCosmos API is running.');
+  });
+
+  // ── Rate Limiting (Sensitive Endpoints Only) ──────────────
+  app.use('/api/auth', createRateLimiter());
+  app.use(
+    '/api/bookings',
+    createRateLimiter({
+      max: 20, // Stricter limit for booking operations
+      windowMs: 15 * 60 * 1000,
+    })
+  );
 
   // ── Body Parsing ──────────────────────────────────────────
   app.use(express.json({ limit: '10kb' }));
