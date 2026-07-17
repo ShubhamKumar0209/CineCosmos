@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
   withCredentials: true, // Crucial for sending HttpOnly cookies (JWTs)
   headers: {
     'Content-Type': 'application/json',
@@ -25,7 +25,8 @@ apiClient.interceptors.response.use(
       
       try {
         // Attempt to refresh token
-        await axios.post('/api/auth/refresh', {}, { withCredentials: true });
+        const refreshUrl = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/auth/refresh` : '/api/auth/refresh';
+        await axios.post(refreshUrl, {}, { withCredentials: true });
         
         // If successful, retry original request
         return apiClient(originalRequest);
