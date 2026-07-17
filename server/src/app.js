@@ -34,6 +34,9 @@ import bookingRoutes from './features/booking/booking.routes.js';
 const createApp = () => {
   const app = express();
 
+  // ── Trust Proxy for Rate Limiter (Render/Heroku) ──────────
+  app.set('trust proxy', 1);
+
   // ── Security Headers ──────────────────────────────────────
   app.use(helmet());
 
