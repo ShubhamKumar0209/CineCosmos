@@ -121,7 +121,13 @@ const seedInfra = async () => {
       { name: 'Pune', state: 'Maharashtra' },
       { name: 'Kolkata', state: 'West Bengal' },
       { name: 'Ahmedabad', state: 'Gujarat' },
-      { name: 'Chandigarh', state: 'Chandigarh' }
+      { name: 'Chandigarh', state: 'Chandigarh' },
+      { name: 'Jaipur', state: 'Rajasthan' },
+      { name: 'Patna', state: 'Bihar' },
+      { name: 'Nagpur', state: 'Maharashtra' },
+      { name: 'Jamshedpur', state: 'Jharkhand' },
+      { name: 'Ranchi', state: 'Jharkhand' },
+      { name: 'Vellore', state: 'Tamil Nadu' }
     ];
 
     console.log('🏙️ Creating Cities...');
@@ -215,6 +221,36 @@ const seedInfra = async () => {
         { brand: 'Cinepolis', name: 'Cinepolis', address: 'TDI Mall, Sector 17' },
         { brand: 'INOX', name: 'INOX', address: 'NH22 Mall, Ambala Highway' },
         { brand: 'PVR', name: 'PVR', address: 'Centra Mall, Industrial Area' }
+      ],
+      'Jaipur': [
+        { brand: 'INOX', name: 'INOX', address: 'Crystal Palm Mall, Bais Godam' },
+        { brand: 'PVR', name: 'PVR', address: 'Mall of Jaipur, Gandhi Path' },
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Triton Mall, Jhotwara' }
+      ],
+      'Patna': [
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'P&M Mall, Patliputra' },
+        { brand: 'Regent', name: 'Regent Fun Cinemas', address: 'Gandhi Maidan' },
+        { brand: 'Mona', name: 'Mona Cinema', address: 'Gandhi Maidan' }
+      ],
+      'Nagpur': [
+        { brand: 'PVR', name: 'PVR', address: 'Empress Mall' },
+        { brand: 'INOX', name: 'INOX', address: 'Poonam Mall, Wardhaman Nagar' },
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'VR Mall, Medical Square' }
+      ],
+      'Jamshedpur': [
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'P&M Hi-Tech City Centre Mall' },
+        { brand: 'Eylex', name: 'Eylex Cinemas', address: 'NH33' },
+        { brand: 'Payal', name: 'Payal Cinema', address: 'Mango' }
+      ],
+      'Ranchi': [
+        { brand: 'PVR', name: 'PVR', address: 'Nucleus Mall, Circular Road' },
+        { brand: 'Carnival', name: 'Carnival Cinemas', address: 'JD Hi Street Mall' },
+        { brand: 'Fun Cinemas', name: 'Fun Cinemas', address: 'Spring City Mall' }
+      ],
+      'Vellore': [
+        { brand: 'PVR', name: 'PVR', address: 'Velocity, Silk Mill' },
+        { brand: 'Vishnu', name: 'Vishnu Cinemas', address: 'Katpadi' },
+        { brand: 'Galaxy', name: 'Galaxy Cinemas', address: 'Old Town' }
       ]
     };
 
@@ -295,18 +331,19 @@ const seedInfra = async () => {
         }
       }
 
-      // Schedule the assigned movies for each screen
-      for (const { theater, screen } of allScreensInCity) {
-        
-        // Shuffle all movies so this screen cycles through a random mix of them all day
-        const screenMovies = [...nowShowingMovies].sort(() => 0.5 - Math.random());
+      // We want to guarantee EVERY nowShowingMovie is played in this city.
+      // We use a single index for the whole city to assign movies to slots across all screens evenly.
+      const cityMovies = [...nowShowingMovies].sort(() => 0.5 - Math.random());
+      let cityMovieIndex = 0;
 
-        // Schedule for the next 7 days
-        for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
-          const currentDate = new Date(baseDate);
-          currentDate.setDate(currentDate.getDate() + dayOffset);
+      // Schedule for the next 7 days
+      for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
+        const currentDate = new Date(baseDate);
+        currentDate.setDate(currentDate.getDate() + dayOffset);
 
-          // Showtimes: Start at 8:00 AM and end by 12:00 AM
+        // For each screen in the city, fill its day slots
+        for (const { theater, screen } of allScreensInCity) {
+          
           let currentSlotTime = new Date(currentDate);
           currentSlotTime.setHours(8, 0, 0, 0);
 
@@ -314,9 +351,11 @@ const seedInfra = async () => {
           cutoffTime.setDate(cutoffTime.getDate() + 1); // Next day
           cutoffTime.setHours(0, 0, 0, 0); // 12:00 AM Midnight strict cutoff
 
-          let i = 0;
           while (true) {
-            const movie = screenMovies[i % screenMovies.length];
+            // Pick the next movie from the city's shuffled pool to guarantee all get played
+            const movie = cityMovies[cityMovieIndex % cityMovies.length];
+            cityMovieIndex++;
+
             const runtimeMins = movie.runtime || 150;
             const endDate = new Date(currentSlotTime.getTime() + runtimeMins * 60000);
 
@@ -351,8 +390,6 @@ const seedInfra = async () => {
             }
             currentSlotTime.setSeconds(0);
             currentSlotTime.setMilliseconds(0);
-            
-            i++;
           }
         }
       }
