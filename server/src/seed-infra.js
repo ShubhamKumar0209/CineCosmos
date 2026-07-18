@@ -113,15 +113,15 @@ const seedInfra = async () => {
 
     // 2. Additional Cities
     const newCities = [
+      { name: 'Mumbai', state: 'Maharashtra' },
+      { name: 'Delhi', state: 'Delhi' },
+      { name: 'Bengaluru', state: 'Karnataka' },
+      { name: 'Hyderabad', state: 'Telangana' },
+      { name: 'Chennai', state: 'Tamil Nadu' },
       { name: 'Pune', state: 'Maharashtra' },
       { name: 'Kolkata', state: 'West Bengal' },
       { name: 'Ahmedabad', state: 'Gujarat' },
-      { name: 'Jaipur', state: 'Rajasthan' },
-      { name: 'Patna', state: 'Bihar' },
-      { name: 'Ranchi', state: 'Jharkhand' },
-      { name: 'Jamshedpur', state: 'Jharkhand' },
-      { name: 'Vellore', state: 'Tamil Nadu' },
-      { name: 'Nagpur', state: 'Maharashtra' }
+      { name: 'Chandigarh', state: 'Chandigarh' }
     ];
 
     console.log('🏙️ Creating Cities...');
@@ -135,23 +135,69 @@ const seedInfra = async () => {
 
     // 3. Theaters & Screens
     console.log('🍿 Creating Theaters and Screens...');
-    const theaterBrands = ['PVR Cinemas', 'INOX', 'Cinepolis', 'Carnival Cinemas', 'Miraj Cinemas'];
     const createdTheaters = [];
+    
+    const realTheatersMap = {
+      'Mumbai': [
+        { brand: 'PVR', name: 'PVR Icon', address: 'Phoenix Palladium, Lower Parel' },
+        { brand: 'INOX', name: 'INOX Megaplex', address: 'Inorbit Mall, Malad West' },
+        { brand: 'Cinepolis', name: 'Cinepolis VIP', address: 'Andheri West' },
+        { brand: 'PVR', name: 'PVR Premiere', address: 'Juhu' }
+      ],
+      'Delhi': [
+        { brand: 'PVR', name: 'PVR Director\'s Cut', address: 'Ambience Mall, Vasant Kunj' },
+        { brand: 'INOX', name: 'INOX Laserplex', address: 'Nehru Place' },
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'DLF Avenue, Saket' },
+        { brand: 'PVR', name: 'PVR IMAX', address: 'Select Citywalk, Saket' }
+      ],
+      'Bengaluru': [
+        { brand: 'PVR', name: 'PVR Superplex', address: 'Orion Mall, Rajajinagar' },
+        { brand: 'INOX', name: 'INOX Insignia', address: 'Forum Mall, Koramangala' },
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Nexus Shantiniketan, Whitefield' },
+        { brand: 'PVR', name: 'PVR PXL', address: 'Phoenix Marketcity, Whitefield' }
+      ],
+      'Hyderabad': [
+        { brand: 'INOX', name: 'INOX', address: 'GVK One Mall, Banjara Hills' },
+        { brand: 'PVR', name: 'PVR', address: 'Inorbit Mall, Madhapur' },
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Mantra Mall, Attapur' },
+        { brand: 'AMB', name: 'AMB Cinemas', address: 'Sarath City Capital Mall, Kondapur' }
+      ],
+      'Chennai': [
+        { brand: 'PVR', name: 'PVR', address: 'VR Mall, Anna Nagar' },
+        { brand: 'INOX', name: 'INOX', address: 'Express Avenue, Royapettah' },
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'BSR Mall, OMR' }
+      ],
+      'Pune': [
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Westend Mall, Aundh' },
+        { brand: 'PVR', name: 'PVR', address: 'Phoenix Marketcity, Viman Nagar' },
+        { brand: 'INOX', name: 'INOX', address: 'Amanora Mall, Hadapsar' }
+      ],
+      'Kolkata': [
+        { brand: 'PVR', name: 'PVR', address: 'South City Mall, Jadavpur' },
+        { brand: 'INOX', name: 'INOX', address: 'Quest Mall, Ballygunge' },
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Acropolis Mall, Kasba' }
+      ],
+      'Ahmedabad': [
+        { brand: 'PVR', name: 'PVR', address: 'Acropolis Mall, Thaltej' },
+        { brand: 'INOX', name: 'INOX', address: 'Alpha One, Vastrapur' },
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Ahmedabad One Mall' }
+      ],
+      'Chandigarh': [
+        { brand: 'PVR', name: 'PVR', address: 'Elante Mall, Industrial Area' },
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'TDI Mall, Sector 17' }
+      ]
+    };
 
     for (const city of allCities) {
-      // Create 4-6 theaters per city to ensure high density
-      const numTheaters = Math.floor(Math.random() * 3) + 4;
+      const cityTheaters = realTheatersMap[city.name] || [];
 
-      for (let i = 0; i < numTheaters; i++) {
-        const brand = theaterBrands[Math.floor(Math.random() * theaterBrands.length)];
-        const theaterName = `${brand} - ${city.name} Central`;
-
-        let theater = await Theater.findOne({ name: theaterName, city: city._id });
+      for (const tData of cityTheaters) {
+        let theater = await Theater.findOne({ name: tData.name, city: city._id });
         if (!theater) {
           theater = await Theater.create({
-            name: theaterName,
+            name: tData.name,
             city: city._id,
-            address: `${Math.floor(Math.random() * 100) + 1} Main St, ${city.name} Mall`
+            address: tData.address
           });
         }
 
@@ -160,7 +206,7 @@ const seedInfra = async () => {
         const screens = [...existingScreens];
 
         if (existingScreens.length === 0) {
-          const numScreens = Math.floor(Math.random() * 3) + 2; // 2 to 4 screens
+          const numScreens = Math.floor(Math.random() * 3) + 3; // 3 to 5 screens
           for (let s = 1; s <= numScreens; s++) {
             const screen = await Screen.create({
               name: `Screen ${s}`,
@@ -235,12 +281,13 @@ const seedInfra = async () => {
           const currentDate = new Date(baseDate);
           currentDate.setDate(currentDate.getDate() + dayOffset);
 
-          // Showtimes: Start at 8:00 AM and do not exceed 11:00 PM
+          // Showtimes: Start at 8:00 AM and end by 12:00 AM
           let currentSlotTime = new Date(currentDate);
           currentSlotTime.setHours(8, 0, 0, 0);
 
           const cutoffTime = new Date(currentDate);
-          cutoffTime.setHours(23, 0, 0, 0); // 11:00 PM
+          cutoffTime.setDate(cutoffTime.getDate() + 1); // Next day
+          cutoffTime.setHours(0, 0, 0, 0); // 12:00 AM Midnight strict cutoff
 
           let i = 0;
           while (true) {
@@ -248,7 +295,7 @@ const seedInfra = async () => {
             const runtimeMins = movie.runtime || 150;
             const endDate = new Date(currentSlotTime.getTime() + runtimeMins * 60000);
 
-            // If the movie ends after 11:00 PM, we stop scheduling for today
+            // If the movie ends after 12:00 AM, we stop scheduling for today
             if (endDate > cutoffTime) {
               break;
             }
@@ -271,6 +318,15 @@ const seedInfra = async () => {
 
             // Next slot starts 30 mins after this movie ends (cleaning and prep)
             currentSlotTime = new Date(endDate.getTime() + 30 * 60000);
+            
+            // Round up to nearest 5 minutes
+            const remainder = currentSlotTime.getMinutes() % 5;
+            if (remainder !== 0) {
+              currentSlotTime.setMinutes(currentSlotTime.getMinutes() + (5 - remainder));
+            }
+            currentSlotTime.setSeconds(0);
+            currentSlotTime.setMilliseconds(0);
+            
             i++;
           }
         }

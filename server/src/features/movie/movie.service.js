@@ -1,6 +1,7 @@
 import Movie from './movie.model.js';
 import * as tmdbService from './tmdb.service.js';
 import { MOVIE_STATUS, TMDB_CACHE_TTL_HOURS } from '../../utils/constants.js';
+import * as showtimeService from '../showtime/showtime.service.js';
 import logger from '../../utils/logger.js';
 
 /**
@@ -59,4 +60,49 @@ export const syncMoviesFromTMDB = async () => {
 
   logger.info(`TMDB sync complete. Results: ${JSON.stringify(results)}`);
   return results;
+};
+
+/**
+ * Promotes coming_soon movies to now_showing when release date is reached.
+ * Archives the oldest now_showing movies to make room, and swaps their schedules.
+ */
+export const promoteAndRotateMovies = async () => {
+  logger.info('Starting movie promotion and rotation...');
+  const now = new Date();
+  
+  // Find movies that should be promoted
+  const moviesToPromote = await Movie.find({
+    status: MOVIE_STATUS.COMING_SOON,
+    releaseDate: { $lte: now }
+  });
+
+  if (moviesToPromote.length === 0) {
+    logger.info('No movies ready for promotion today.');
+    return;
+  }
+
+  for (const movie of moviesToPromote) {
+    logger.info(`Promoting movie: ${movie.title}`);
+    
+    // 1. Promote new movie
+    movie.status = MOVIE_STATUS.NOW_SHOWING;
+    await movie.save();
+
+    // 2. Find oldest now_showing movie to archive
+    const oldestMovie = await Movie.findOne({
+      status: MOVIE_STATUS.NOW_SHOWING,
+      _id: { $ne: movie._id }
+    }).sort({ releaseDate: 1 });
+
+    if (oldestMovie) {
+      logger.info(`Archiving oldest movie: ${oldestMovie.title}`);
+      oldestMovie.status = MOVIE_STATUS.ARCHIVED;
+      await oldestMovie.save();
+
+      // 3. Swap schedules
+      await showtimeService.replaceMovieInSchedule(oldestMovie._id, movie._id);
+    }
+  }
+  
+  logger.info('Movie promotion and rotation complete.');
 };

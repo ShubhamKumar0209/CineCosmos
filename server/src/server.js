@@ -30,7 +30,7 @@ const startServer = async () => {
     Promise.all([
       import('./features/movie/movie.service.js'),
       import('./features/showtime/showtime.service.js')
-    ]).then(([{ syncMoviesFromTMDB }, { generateRollingShowtimes }]) => {
+    ]).then(([{ syncMoviesFromTMDB, promoteAndRotateMovies }, { generateRollingShowtimes }]) => {
       const ONE_DAY_MS = 24 * 60 * 60 * 1000;
       
       const runDailyTasks = async () => {
@@ -38,6 +38,9 @@ const startServer = async () => {
           logger.info('Running scheduled TMDB sync to fetch new movies...');
           await syncMoviesFromTMDB();
           
+          logger.info('Running movie promotion and rotation...');
+          await promoteAndRotateMovies();
+
           logger.info('Running rolling showtime generator...');
           await generateRollingShowtimes();
         } catch (err) {

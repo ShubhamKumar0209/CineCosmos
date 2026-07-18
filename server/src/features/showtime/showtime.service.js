@@ -167,7 +167,8 @@ export const generateRollingShowtimes = async () => {
         currentSlotTime.setHours(8, 0, 0, 0); // 8:00 AM
 
         const cutoffTime = new Date(targetDate);
-        cutoffTime.setHours(23, 0, 0, 0); // 11:00 PM
+        cutoffTime.setDate(cutoffTime.getDate() + 1);
+        cutoffTime.setHours(0, 0, 0, 0); // 12:00 AM Midnight strict cutoff
 
         let mIndex = 0;
         while (true) {
@@ -194,6 +195,15 @@ export const generateRollingShowtimes = async () => {
 
           // 30 min prep
           currentSlotTime = new Date(endDate.getTime() + 30 * 60000);
+          
+          // Round up to nearest 5 minutes
+          const remainder = currentSlotTime.getMinutes() % 5;
+          if (remainder !== 0) {
+            currentSlotTime.setMinutes(currentSlotTime.getMinutes() + (5 - remainder));
+          }
+          currentSlotTime.setSeconds(0);
+          currentSlotTime.setMilliseconds(0);
+          
           mIndex++;
         }
       }
@@ -204,4 +214,63 @@ export const generateRollingShowtimes = async () => {
   }
 
   logger.info(`Rolling showtime generation complete. Total new showtimes: ${totalGenerated}`);
+};
+
+/**
+ * Replaces future unbooked showtimes of an old movie with a new movie.
+ */
+export const replaceMovieInSchedule = async (oldMovieId, newMovieId) => {
+  logger.info(`Replacing future showtimes of old movie ${oldMovieId} with new movie ${newMovieId}`);
+  const now = new Date();
+  
+  // Find all future showtimes for old movie with 0 booked seats
+  const emptyShowtimes = await Showtime.find({
+    movie: oldMovieId,
+    startTime: { $gt: now },
+    $expr: { $eq: [{ $size: "$bookedSeats" }, 0] }
+  }).populate('screen theater');
+  
+  if (emptyShowtimes.length === 0) {
+    logger.info(`No empty future showtimes found for movie ${oldMovieId} to replace.`);
+    return;
+  }
+  
+  const newMovie = await Movie.findById(newMovieId);
+  if (!newMovie) return;
+  
+  let replacedCount = 0;
+  
+  for (const oldShow of emptyShowtimes) {
+    // Delete the old one to free the slot
+    await Showtime.findByIdAndDelete(oldShow._id);
+    
+    // Create new one in the exact same slot (adjusting end time)
+    const runtimeMins = newMovie.runtime || 150;
+    const durationMs = (runtimeMins + 30) * 60000;
+    const newEndTime = new Date(oldShow.startTime.getTime() + durationMs);
+    
+    // Verify no overlap with next showtime
+    const overlapping = await Showtime.findOne({
+      screen: oldShow.screen._id,
+      startTime: { $lt: newEndTime },
+      endTime: { $gt: oldShow.startTime } 
+    });
+    
+    if (!overlapping) {
+      await Showtime.create({
+        movie: newMovieId,
+        screen: oldShow.screen._id,
+        theater: oldShow.theater._id,
+        city: oldShow.city,
+        startTime: oldShow.startTime,
+        endTime: newEndTime,
+        price: oldShow.price
+      });
+      replacedCount++;
+    } else {
+      logger.warn(`Skipped replacement on screen ${oldShow.screen.name} due to runtime overlap.`);
+    }
+  }
+  
+  logger.info(`Successfully replaced ${replacedCount} showtimes for new movie ${newMovie.title}.`);
 };

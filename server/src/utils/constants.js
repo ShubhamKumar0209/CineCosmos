@@ -18,6 +18,7 @@ export const BOOKING_STATUS = Object.freeze({
 export const MOVIE_STATUS = Object.freeze({
   NOW_SHOWING: 'now_showing',
   COMING_SOON: 'coming_soon',
+  ARCHIVED: 'archived',
 });
 
 export const COOKIE_NAMES = Object.freeze({
