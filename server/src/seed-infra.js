@@ -142,49 +142,79 @@ const seedInfra = async () => {
         { brand: 'PVR', name: 'PVR Icon', address: 'Phoenix Palladium, Lower Parel' },
         { brand: 'INOX', name: 'INOX Megaplex', address: 'Inorbit Mall, Malad West' },
         { brand: 'Cinepolis', name: 'Cinepolis VIP', address: 'Andheri West' },
-        { brand: 'PVR', name: 'PVR Premiere', address: 'Juhu' }
+        { brand: 'PVR', name: 'PVR Premiere', address: 'Juhu' },
+        { brand: 'INOX', name: 'INOX', address: 'R-City Mall, Ghatkopar' },
+        { brand: 'Cinepolis', name: 'Cinepolis Grand Central', address: 'Seawoods, Navi Mumbai' },
+        { brand: 'PVR', name: 'PVR', address: 'Oberoi Mall, Goregaon' },
+        { brand: 'INOX', name: 'INOX', address: 'Metro Junction, Kalyan' },
+        { brand: 'PVR', name: 'PVR', address: 'Growels 101, Kandivali' }
       ],
       'Delhi': [
         { brand: 'PVR', name: 'PVR Director\'s Cut', address: 'Ambience Mall, Vasant Kunj' },
         { brand: 'INOX', name: 'INOX Laserplex', address: 'Nehru Place' },
         { brand: 'Cinepolis', name: 'Cinepolis', address: 'DLF Avenue, Saket' },
-        { brand: 'PVR', name: 'PVR IMAX', address: 'Select Citywalk, Saket' }
+        { brand: 'PVR', name: 'PVR IMAX', address: 'Select Citywalk, Saket' },
+        { brand: 'PVR', name: 'PVR', address: 'Pacific Mall, Subhash Nagar' },
+        { brand: 'INOX', name: 'INOX', address: 'Janakpuri District Centre' },
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Cross River Mall, Shahdara' },
+        { brand: 'PVR', name: 'PVR', address: 'Vegas Mall, Dwarka' }
       ],
       'Bengaluru': [
         { brand: 'PVR', name: 'PVR Superplex', address: 'Orion Mall, Rajajinagar' },
         { brand: 'INOX', name: 'INOX Insignia', address: 'Forum Mall, Koramangala' },
         { brand: 'Cinepolis', name: 'Cinepolis', address: 'Nexus Shantiniketan, Whitefield' },
-        { brand: 'PVR', name: 'PVR PXL', address: 'Phoenix Marketcity, Whitefield' }
+        { brand: 'PVR', name: 'PVR PXL', address: 'Phoenix Marketcity, Whitefield' },
+        { brand: 'INOX', name: 'INOX', address: 'Garuda Mall, Magrath Road' },
+        { brand: 'PVR', name: 'PVR', address: 'Nexus Mall, Koramangala' },
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Lulu Mall, Rajajinagar' },
+        { brand: 'INOX', name: 'INOX', address: 'Mantri Square, Malleshwaram' }
       ],
       'Hyderabad': [
         { brand: 'INOX', name: 'INOX', address: 'GVK One Mall, Banjara Hills' },
         { brand: 'PVR', name: 'PVR', address: 'Inorbit Mall, Madhapur' },
         { brand: 'Cinepolis', name: 'Cinepolis', address: 'Mantra Mall, Attapur' },
-        { brand: 'AMB', name: 'AMB Cinemas', address: 'Sarath City Capital Mall, Kondapur' }
+        { brand: 'AMB', name: 'AMB Cinemas', address: 'Sarath City Capital Mall, Kondapur' },
+        { brand: 'PVR', name: 'PVR', address: 'Next Galleria Mall, Irrum Manzil' },
+        { brand: 'INOX', name: 'INOX', address: 'GSM Mall, Miyapur' },
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Sudha Cinema, Shalibanda' },
+        { brand: 'PVR', name: 'PVR', address: 'Preston Prime, Gachibowli' }
       ],
       'Chennai': [
         { brand: 'PVR', name: 'PVR', address: 'VR Mall, Anna Nagar' },
         { brand: 'INOX', name: 'INOX', address: 'Express Avenue, Royapettah' },
-        { brand: 'Cinepolis', name: 'Cinepolis', address: 'BSR Mall, OMR' }
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'BSR Mall, OMR' },
+        { brand: 'PVR', name: 'PVR', address: 'Skywalk Mall, Aminjikarai' },
+        { brand: 'INOX', name: 'INOX', address: 'Chennai Citi Centre, Mylapore' },
+        { brand: 'PVR', name: 'PVR', address: 'Grand Galada, Pallavaram' }
       ],
       'Pune': [
         { brand: 'Cinepolis', name: 'Cinepolis', address: 'Westend Mall, Aundh' },
         { brand: 'PVR', name: 'PVR', address: 'Phoenix Marketcity, Viman Nagar' },
-        { brand: 'INOX', name: 'INOX', address: 'Amanora Mall, Hadapsar' }
+        { brand: 'INOX', name: 'INOX', address: 'Amanora Mall, Hadapsar' },
+        { brand: 'PVR', name: 'PVR Icon', address: 'Pavillion Mall, SB Road' },
+        { brand: 'INOX', name: 'INOX', address: 'Elpro City Square, Chinchwad' },
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Seasons Mall, Magarpatta' }
       ],
       'Kolkata': [
         { brand: 'PVR', name: 'PVR', address: 'South City Mall, Jadavpur' },
         { brand: 'INOX', name: 'INOX', address: 'Quest Mall, Ballygunge' },
-        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Acropolis Mall, Kasba' }
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Acropolis Mall, Kasba' },
+        { brand: 'INOX', name: 'INOX', address: 'Forum Mall, Elgin Road' },
+        { brand: 'PVR', name: 'PVR', address: 'Mani Square, EM Bypass' },
+        { brand: 'INOX', name: 'INOX', address: 'City Centre, Salt Lake' }
       ],
       'Ahmedabad': [
         { brand: 'PVR', name: 'PVR', address: 'Acropolis Mall, Thaltej' },
         { brand: 'INOX', name: 'INOX', address: 'Alpha One, Vastrapur' },
-        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Ahmedabad One Mall' }
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'Ahmedabad One Mall' },
+        { brand: 'PVR', name: 'PVR', address: 'Arved Transcube, Ranip' },
+        { brand: 'INOX', name: 'INOX', address: 'Himalaya Mall, Drive In Road' }
       ],
       'Chandigarh': [
         { brand: 'PVR', name: 'PVR', address: 'Elante Mall, Industrial Area' },
-        { brand: 'Cinepolis', name: 'Cinepolis', address: 'TDI Mall, Sector 17' }
+        { brand: 'Cinepolis', name: 'Cinepolis', address: 'TDI Mall, Sector 17' },
+        { brand: 'INOX', name: 'INOX', address: 'NH22 Mall, Ambala Highway' },
+        { brand: 'PVR', name: 'PVR', address: 'Centra Mall, Industrial Area' }
       ]
     };
 
@@ -251,6 +281,7 @@ const seedInfra = async () => {
     }
 
     let showtimesCreated = 0;
+    const showtimesToInsert = [];
     const baseDate = new Date();
     baseDate.setHours(0, 0, 0, 0); // Start of today
 
@@ -264,17 +295,11 @@ const seedInfra = async () => {
         }
       }
 
-      // Round-robin assign all nowShowingMovies to the screens in this city
-      let screenIndex = 0;
-      for (const movie of nowShowingMovies) {
-        allScreensInCity[screenIndex % allScreensInCity.length].assignedMovies.push(movie);
-        screenIndex++;
-      }
-
       // Schedule the assigned movies for each screen
-      for (const { theater, screen, assignedMovies } of allScreensInCity) {
-        // If a screen got no movies (unlikely if movies > screens), assign a random one
-        const screenMovies = assignedMovies.length > 0 ? assignedMovies : [nowShowingMovies[0]];
+      for (const { theater, screen } of allScreensInCity) {
+        
+        // Shuffle all movies so this screen cycles through a random mix of them all day
+        const screenMovies = [...nowShowingMovies].sort(() => 0.5 - Math.random());
 
         // Schedule for the next 7 days
         for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
@@ -304,7 +329,7 @@ const seedInfra = async () => {
             if (currentSlotTime >= new Date()) {
               const price = (Math.floor(Math.random() * 5) * 50 + 150) * 100;
 
-              await Showtime.create({
+              showtimesToInsert.push({
                 movie: movie._id,
                 theater: theater._id,
                 screen: screen._id,
@@ -330,6 +355,15 @@ const seedInfra = async () => {
             i++;
           }
         }
+      }
+    }
+
+    if (showtimesToInsert.length > 0) {
+      console.log(`Bulk inserting ${showtimesToInsert.length} showtimes...`);
+      const chunkSize = 2000;
+      for (let i = 0; i < showtimesToInsert.length; i += chunkSize) {
+        await Showtime.insertMany(showtimesToInsert.slice(i, i + chunkSize));
+        console.log(`Inserted ${Math.min(i + chunkSize, showtimesToInsert.length)} / ${showtimesToInsert.length}`);
       }
     }
 

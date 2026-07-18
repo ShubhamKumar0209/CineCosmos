@@ -150,18 +150,11 @@ export const generateRollingShowtimes = async () => {
         }
       }
 
-      // Round-robin assign movies
-      let screenIndex = 0;
-      for (const movie of nowShowingMovies) {
-        if (allScreensInCity.length > 0) {
-          allScreensInCity[screenIndex % allScreensInCity.length].assignedMovies.push(movie);
-          screenIndex++;
-        }
-      }
-
       // Schedule the day for each screen
-      for (const { theater, screen, assignedMovies } of allScreensInCity) {
-        const screenMovies = assignedMovies.length > 0 ? assignedMovies : [nowShowingMovies[0]];
+      for (const { theater, screen } of allScreensInCity) {
+        
+        // Shuffle all movies so this screen cycles through a random mix of them all day
+        const screenMovies = [...nowShowingMovies].sort(() => 0.5 - Math.random());
         
         let currentSlotTime = new Date(targetDate);
         currentSlotTime.setHours(8, 0, 0, 0); // 8:00 AM
