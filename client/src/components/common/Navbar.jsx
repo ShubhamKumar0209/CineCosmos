@@ -24,12 +24,12 @@ const Navbar = () => {
       </button>
 
       <div className={`navbar-links ${menuOpen ? 'open' : ''}`}>
-        <NavLink to="/" className="btn btn-ghost" onClick={closeMenu}>
-          Home
-        </NavLink>
         {user ? (
           <>
             <span className="navbar-greeting">Hi, {user.name}</span>
+            <NavLink to="/" className="btn btn-ghost" onClick={closeMenu}>
+              Home
+            </NavLink>
             <NavLink to="/my-bookings" className="btn btn-ghost" onClick={closeMenu}>
               My Bookings
             </NavLink>
@@ -47,6 +47,9 @@ const Navbar = () => {
           </>
         ) : (
           <>
+            <NavLink to="/" className="btn btn-ghost" onClick={closeMenu}>
+              Home
+            </NavLink>
             <NavLink to="/login" className="btn btn-outline" onClick={closeMenu}>
               Login
             </NavLink>
